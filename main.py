@@ -29,12 +29,13 @@ def fill_form():
     sleep(20)
  
 fill_form()
+
 def loan_application(data, skip_first_task=False):
 
     try:
         if not skip_first_task:
             try:
-                WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="iss-wrapper"]/div[3]/div/div/div[2]/div/div[2]/div[5]/button/span'))).click()
+                WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="iss-wrapper"]/div[3]/div/div/div[2]/div/div[2]/div[5]/button/span'))).click()
                 sleep(1)
             except TimeoutExeption: # type: ignore
                 print("Button not found, skipping the task...")
@@ -70,7 +71,7 @@ def loan_application(data, skip_first_task=False):
         beneficiary_details.send_keys(Keys.ENTER)
         sleep(4)
 
-        ok_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="iss-wrapper"]/div[3]/div/div/div/div/div/div[3]/button[2]')))
+        ok_button = WebDriverWait(driver, 8).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="iss-wrapper"]/div[3]/div/div/div/div/div/div[3]/button[2]')))
         ok_button.click()
         sleep(2)
 
@@ -94,7 +95,9 @@ while True:
                 if row_count == 4:
                     print("4 rows processed, stopping the process")
                     break
+                
                 skip_first_task = True
+                
             if row_count == 4:
                 break
 
