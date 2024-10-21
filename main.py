@@ -15,12 +15,12 @@ def fill_form():
     try:
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div/section/div/div/div/div[1]/div/div[1]/div[1]'))).click()
     except Exception as e:
-        print("Error with clicking dropdown:", e)
+        print(f"Error with clicking dropdown:{e}")
    
     try :
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div/section/div/div/div/div[1]/div/div[1]/div[2]/span/i'))).click()
     except Exception as e:
-        print("Error with clicking submenu link:", e)
+        print(f"Error with clicking submenu link:{e}")
 
     driver.find_element(By.XPATH,'//*[@id="app"]/div/div/div/section/div/div/div/div[2]/div/form/div/input').send_keys("9887784666")
     sleep(2)
@@ -95,6 +95,9 @@ while True:
                     print("4 rows processed, stopping the process")
                     break
                 skip_first_task = True
+            if row_count == 4:
+                break
+
     except FileNotFoundError:
         print("File not found, Please check the file path...")
         break
