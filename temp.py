@@ -1,25 +1,32 @@
-# i = 1
-# while i <=100:
-#     print(i)
-#     i += 1
+# first_name = input("enter your first name:")
+# length = len(first_name)
+# print(length)
 
-# i = 100
-# while i >= 1:
-#     print(i)
-#     i -= 1
+# str = "$ dinesh kumar $ barupal $"
+# print(str.count("$"))
 
-# n = int(input("Enter number:"))
-# i = 1 
-# while i <= 10:
-#     print(n * i)
-#     i += 1
+# str1 = "dinesh"
+# str2 = "kumar"
+# concatination = str1 +" "+ str2
+# print(concatination)
+
+# str3 = "dinesh kumar barupal from india"
+# print(str3[:6])  # str3[0:6]
+# print(str3[0:6])
+# print(str3[2:6])
+# print(str3[2:])
+# print(str3[2:len(str3)])
+
+# Converting the string "Dinesh Kumar" into bytes using UTF-8 encoding
+
+# name = "Dinesh Kumar"
+# bytes_representation = name.encode("utf-8")
+# print(bytes_representation)
 
 
-list = [1,2,3,4,5,6,7,8,9,10]
-x = 7
-indx = 0 
-for elem in list:
-    if elem == x:
-        print(x, "found" ,indx)
-    print("founding..")
-    indx += 1
+intro = "hello, my name is dinesh kumar"
+split = intro.split()
+print(split)
+
+split2 = split[1]
+print(split2)
