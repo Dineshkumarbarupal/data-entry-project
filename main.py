@@ -177,7 +177,7 @@ def loan_application(data, skip_first_task=False):
 
         cunfirm_button = WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="iss-wrapper"]/div[3]/div/div/div/div/div/button[2]')))
         cunfirm_button.click()
-        sleep(15)
+        sleep(1)
         print("Clicking ok button...")
     
         return True
@@ -192,7 +192,8 @@ def next_task():
 
         # return False
 
-def extract_and_append_data(csv_file):
+
+def extract_and_update_data(csv_file, current_row_data):
     try:
         success_message = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'pt-4'))
@@ -200,11 +201,11 @@ def extract_and_append_data(csv_file):
 
         print(f"Success Message: {success_message}")
 
-        message_parts = success_message.split() 
+        message_parts = success_message.split()
         
         try:
-           loan_application_id = message_parts[2]
-           status_detail = message_parts[4] 
+            loan_application_id = message_parts[3]  # Adjust index if needed
+            status_detail = message_parts[4]  # Adjust index if needed
         except IndexError:
             print("Error extracting Loan Application ID or Status Detail, check success message format...")
             return
@@ -212,45 +213,50 @@ def extract_and_append_data(csv_file):
         print(f"Loan Application ID: {loan_application_id}")
         print(f"Status Detail: {status_detail}")
 
-        new_data = {'loan_application_id': loan_application_id, 'status_detail': status_detail}
+        # Load all rows from CSV into memory
+        updated_rows = []
+        with open(csv_file, 'r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            fieldnames = reader.fieldnames
+            for row in reader:
+                # Identify the row that matches the current row data
+                if row['sno'] == current_row_data['sno']:  # Use appropriate column for matching
+                    row['loan_application_id'] = loan_application_id
+                    row['status_detail'] = status_detail
+                updated_rows.append(row)
 
-        with open(csv_file, 'a', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=['loan_application_id', 'status_detail'])
+        # Write back to CSV with updated data
+        with open(csv_file, 'w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(updated_rows)
 
-            # if file.tell() == 0:
-            #     writer.writeheader()
-
-            writer.writerow(new_data)
-
-        print("Data successfully written to CSV...")
+        print("Data successfully updated in CSV...")
 
     except Exception as e:
-        print(f"Error extracting application ID or writing to CSV: {e}")
-        
+        print(f"Error extracting application ID or updating CSV: {e}")
 def process_csv(file):
     with open(file, newline='', encoding='utf-8') as csvfile:
         data = csv.DictReader(csvfile)
         skip_first_task = False
         for row in data:
-            print("Procesing row...")
+            print("Processing row...")
 
             if skip_first_task or fill_form():
-                print("From filing start...")
+                print("Form filing start...")
                 success = loan_application(row, skip_first_task)
-                print(f"loan application for row{row}: {success}")
+                print(f"Loan application for row {row}: {success}")
             
                 if success:
-                    print("Loan application succesful, Extrating and appending data...")
-                    extract_and_append_data(file)
+                    print("Loan application successful, extracting and appending data...")
+                    extract_and_update_data(file, row)
                     next_task()
-
                 else:
-                    print("Loan application failed, skipping data extration.... ")
+                    print("Loan application failed, skipping data extraction...")
                 
                 skip_first_task = True
             else:
-                print("an error occured...")
-
+                print("An error occurred...")
 
 file = 'data.csv'
 process_csv(file)
