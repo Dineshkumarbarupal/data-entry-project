@@ -24,9 +24,17 @@
 # print(bytes_representation)
 
 
-intro = "hello, my name is dinesh kumar"
-split = intro.split()
-print(split)
+# intro = "hello, my name is dinesh kumar"
+# split = intro.split()
+# print(split)
 
-split2 = split[1]
-print(split2)
+# split2 = split[1]
+# print(split2)
+
+
+dict = {
+    "name" : "dinesh kumar barupal",
+    "age" : 19,
+    "profesion" : "software engineer",
+    "work place" : "alien company ramsinghpur"
+}

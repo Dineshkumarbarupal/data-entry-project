@@ -206,6 +206,7 @@ def extract_and_update_data(csv_file, current_row_data):
         try:
             loan_application_id = message_parts[3]  # Adjust index if needed
             status_detail = message_parts[4]  # Adjust index if needed
+            
         except IndexError:
             print("Error extracting Loan Application ID or Status Detail, check success message format...")
             return
