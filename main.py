@@ -1,3 +1,4 @@
+import logging
 import csv
 from selenium import webdriver 
 from selenium.webdriver.common.by import By
@@ -7,10 +8,15 @@ from selenium.webdriver.common.keys import Keys
 import calendar
 from time import sleep
 
+logging.basicConfig(filename='automation.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
 driver = webdriver.Chrome()
 driver.get("https://fasalrin.gov.in/")
 driver.maximize_window()
 driver.implicitly_wait(100)
+
+logging.info("वेबसाइट खुली - URL: https://example.com")
+
 
 def fill_form():
     try:
@@ -29,6 +35,7 @@ def fill_form():
     WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="slide-pass"]/div[1]/form/div/input'))).send_keys("9887784666")
     sleep(1)  
 
+    logging.info("लॉगिन बटन क्लिक किया गया")
     try:
         next_page_element = WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="iss-wrapper"]/div[3]/div/div/div[2]/div/div[2]/div[5]/button'))
@@ -38,6 +45,7 @@ def fill_form():
         print(f"Error after login: {e}")
         return False  
     return True
+logging.info("लॉगिन फॉर्म में डेटा भरा गया")
 
 def loan_application(data, skip_first_task=False):
     try:
@@ -162,7 +170,7 @@ def loan_application(data, skip_first_task=False):
         village.click()
         village.send_keys(data['resVillageId'])
         village.send_keys(Keys.ENTER)
-   
+
         proceed_button = WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="iss-wrapper"]/div[3]/div/div/div[2]/div[2]/div/button')))
         proceed_button.click()
        
@@ -188,10 +196,7 @@ def next_task():
         ok_button = WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="iss-wrapper"]/div[3]/div/div/div/div/div/button')))
         ok_button.click()
 
-        
-
         # return False
-
 
 def extract_and_update_data(csv_file, current_row_data):
     try:
@@ -204,8 +209,8 @@ def extract_and_update_data(csv_file, current_row_data):
         message_parts = success_message.split()
         
         try:
-            loan_application_id = message_parts[3]  # Adjust index if needed
-            status_detail = message_parts[4]  # Adjust index if needed
+            loan_application_id = message_parts[2]  
+            status_detail = message_parts[4]  
             
         except IndexError:
             print("Error extracting Loan Application ID or Status Detail, check success message format...")
@@ -214,19 +219,16 @@ def extract_and_update_data(csv_file, current_row_data):
         print(f"Loan Application ID: {loan_application_id}")
         print(f"Status Detail: {status_detail}")
 
-        # Load all rows from CSV into memory
         updated_rows = []
         with open(csv_file, 'r', newline='', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             fieldnames = reader.fieldnames
             for row in reader:
-                # Identify the row that matches the current row data
-                if row['sno'] == current_row_data['sno']:  # Use appropriate column for matching
+                if row['sno'] == current_row_data['sno']: 
                     row['loan_application_id'] = loan_application_id
                     row['status_detail'] = status_detail
                 updated_rows.append(row)
 
-        # Write back to CSV with updated data
         with open(csv_file, 'w', newline='', encoding='utf-8') as file:
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             writer.writeheader()
@@ -236,6 +238,7 @@ def extract_and_update_data(csv_file, current_row_data):
 
     except Exception as e:
         print(f"Error extracting application ID or updating CSV: {e}")
+
 def process_csv(file):
     with open(file, newline='', encoding='utf-8') as csvfile:
         data = csv.DictReader(csvfile)

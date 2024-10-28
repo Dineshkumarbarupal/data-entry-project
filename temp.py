@@ -32,9 +32,32 @@
 # print(split2)
 
 
-dict = {
-    "name" : "dinesh kumar barupal",
-    "age" : 19,
-    "profesion" : "software engineer",
-    "work place" : "alien company ramsinghpur"
-}
+# dict = {
+#     "name" : "dinesh kumar barupal",
+#     "age" : 19,
+#     "profesion" : "software engineer",
+#     "work place" : "alien company ramsinghpur"
+# }
+
+# dict = {}
+# print(type(dict))
+
+# dict = {"name": "dinesh kumar",
+#         "age" : 19,
+#         "subject" : {"phy": 97,"chemistary": 98, "math": 100},
+#         "school": "aliens company"
+        
+#         }
+
+# print(dict["name"])
+# print(dict.values())
+# print(dict.keys())
+# print(dict.pop("name"))
+# dict.update("name")
+# print(dict)
+
+
+
+
+
+
