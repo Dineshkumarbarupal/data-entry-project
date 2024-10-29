@@ -58,6 +58,18 @@
 
 
 
+# name = input("enter yor first name")
+# print(len(name))
 
 
 
+# 2048 game by sending special keys
+
+# These keys are present in selenium.webdriver.common.keys module
+
+
+str = " hey how are you brother."
+str_split = (str.split())
+
+print(str_split[3])
+print(str_split[4])

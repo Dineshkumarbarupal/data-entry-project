@@ -17,8 +17,8 @@ driver.implicitly_wait(100)
 
 logging.info("वेबसाइट खुली - URL: https://example.com")
 
-
 def fill_form():
+
     try:
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div/section/div/div/div/div[1]/div/div[1]/div[1]'))).click()
     except Exception as e:
@@ -45,6 +45,7 @@ def fill_form():
         print(f"Error after login: {e}")
         return False  
     return True
+
 logging.info("लॉगिन फॉर्म में डेटा भरा गया")
 
 def loan_application(data, skip_first_task=False):
@@ -87,9 +88,11 @@ def loan_application(data, skip_first_task=False):
         select_button.send_keys(Keys.ARROW_DOWN)
         select_button.send_keys(Keys.ENTER)
 
-        WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="applicantDetails"]/div[4]/div/button'))).click()
+        button = WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="applicantDetails"]/div[4]/div/button')))
+        button.click()
     
-        WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="account"]/div[2]/div/div/button[2]'))).click() 
+        button2 = WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="account"]/div[2]/div/div/button[2]')))
+        button2.click() 
 
         date_input = WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="finance"]/div[1]/div[1]/div/div/div[1]/div/input')))
         date_input.click()
@@ -207,7 +210,7 @@ def extract_and_update_data(csv_file, current_row_data):
         print(f"Success Message: {success_message}")
 
         message_parts = success_message.split()
-        
+
         try:
             loan_application_id = message_parts[2]  
             status_detail = message_parts[4]  
